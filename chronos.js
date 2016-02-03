@@ -1,3 +1,10 @@
+/*
+* chronos.js
+*
+* Created by happyCoda on 20.10.2015.
+* Copyright (c) 2015 happyCoda. All rights reserved.
+*/
+
 define(function () {
 	var Chronos = {};
 
@@ -45,13 +52,29 @@ define(function () {
 		secondsRemains = seconds - Math.floor(seconds);
 		seconds = Math.floor(seconds);
 
-		return hours + ':' + minutes + ':' + seconds;
+		this.composedString = hours + ':' + minutes + ':' + seconds;
+
+		return this.composedString;
+	};
+
+	Chronos.getComposedString = function getComposedString() {
+		return this.composeString();
+	};
+
+	Chronos.composedToArray = function composedToArray() {
+		if (this.composedString) {
+			this.composedArray = this.composedString.split(':');
+		} else {
+			this.composedArray = this.getComposedString().split(':');
+		}
+
+		return this.composedArray;
 	};
 
 	Chronos.start = function start(timeString) {
 		this.getNextGameTime(timeString);
 
-		return this.composeString();
+		return this.getComposedString();
 	};
 
 	return Chronos;
