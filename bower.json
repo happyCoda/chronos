@@ -1,0 +1,23 @@
+{
+  "name": "chronos",
+  "main": "chronos.js",
+  "homepage": "https://github.com/happyCoda/chronos",
+  "authors": [
+    "happyCoda <ypworkspace@gmail.com>"
+  ],
+  "description": "A simple and lightweight JavaScript timer",
+  "moduleType": [],
+  "keywords": [
+    "timer",
+    "date",
+    "counter"
+  ],
+  "license": "GPL-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
