@@ -1,0 +1,29 @@
+{
+  "name": "chronos-js",
+  "version": "0.4.3",
+  "description": "A JavaScript timer with simple and convenient API",
+  "main": "chronos.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/happyCoda/chronos.git"
+  },
+  "keywords": [
+    "chronos",
+    "timer",
+    "start",
+    "stop",
+    "time"
+  ],
+  "author": "happyCoda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/happyCoda/chronos/issues"
+  },
+  "homepage": "https://github.com/happyCoda/chronos"
+}
