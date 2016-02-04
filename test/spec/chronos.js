@@ -4,6 +4,7 @@ define([
 	'use strict';
 
 	describe('Chronos test suite', function () {
+
 		describe('Chronos should be able to get current time', function () {
 			it('getCurrentTime method must return a valid timestamp', function () {
 
@@ -12,12 +13,12 @@ define([
 			});
 		});
 
-		describe('Chronos should be able to calculate time left', function () {
-			var left, timeArr;
+		describe('Chronos should be able to calculate time that left', function () {
+			var chr, timeArr;
 
-			left = Chronos.start('10/21/15 12:30');
+			chr = Chronos.start('10/21/15 12:30')
 
-			timeArr = left.split(':');
+			timeArr = chr.composedToArray();
 
 			it('must return correct minute units', function () {
 
@@ -26,6 +27,8 @@ define([
 			});
 
 			it('must return correct second units', function () {
+
+				chr.adjustUnits();
 
 				expect(parseInt(timeArr[2], 10)).toBeLessThan(60);
 				

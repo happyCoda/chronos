@@ -6,75 +6,126 @@
 */
 
 define(function () {
+	'use strict';
+
 	var Chronos = {};
 
-	Chronos.getCurrentTime = function getCurrentTime() {
-		var currentTime = new Date();
-		return currentTime;
+	Chronos.get = function get(prop) {
+		return this[prop];
 	};
 
-	Chronos.getNextGameTime = function getNextGameTime(timeString) {
+	Chronos.getCurrentTime = function getCurrentTime() {
 
-		if (!this.nextGameTime) {
-			this.nextGameTime = new Date(timeString);
+		var currentTime = new Date();
+
+		return currentTime;
+
+	};
+
+	Chronos.getFutureTime = function getFutureTime() {
+
+		if (!this.futureTime) {
+			this.futureTime = new Date(this.timeString);
 		}
 
-		return this.nextGameTime;
+		return this.futureTime;
 	};
 
 	Chronos.getDiff = function getDiff() {
+
 		var diff;
 
-		diff = (this.getNextGameTime().getTime() - this.getCurrentTime().getTime()) / 1000;
+		diff = (this.getFutureTime().getTime() - this.getCurrentTime().getTime());
 
 		return diff;
+
+	};
+
+	Chronos.calculateUnits = function calculateUnits(timestamp) {
+
+		var hoursRaw,
+		hoursRemains,
+		minutesRaw,
+		minutesRemains,
+		secondsRaw;
+
+		this.unitObj = {};
+
+		hoursRaw = timestamp / 10000 / 3600;
+
+		this.unitObj.hours = Math.floor(hoursRaw);
+
+		hoursRemains = hoursRaw - this.unitObj.hours;
+
+		minutesRaw = hoursRemains * 60;
+
+		this.unitObj.minutes = Math.floor(minutesRaw);
+
+		minutesRemains = minutesRaw - this.unitObj.minutes;
+
+		secondsRaw = minutesRemains * 60;
+
+		this.unitObj.seconds = Math.floor(secondsRaw);
+
+		return this.unitObj;
+
+	};
+
+	Chronos.adjustUnits = function adjustUnits() {
+
+		var props, unitObj;
+
+		props = Object.keys(this.unitObj);
+
+		unitObj = this.unitObj;
+
+		props.forEach(function (prop) {
+			if (unitObj[prop].length < 2) {
+				unitObj[prop] = '0' + unitObj[prop];
+			}
+		});
+
 	};
 
 	Chronos.composeString = function composeString() {
 
-		var diff, 
-		hours,
-		hoursRemains,
-		minutes,
-		minutesRemains,
-		seconds,
-		secondsRemains;
-
-		diff = this.getDiff();
-
-		hours = diff / 3600;
-		hoursRemains = hours - Math.floor(hours);
-		hours = Math.floor(hours);
-		minutes = hoursRemains * 60;
-		minutesRemains = minutes - Math.floor(minutes);
-		minutes = Math.floor(minutes);
-		seconds = minutesRemains * 60;
-		secondsRemains = seconds - Math.floor(seconds);
-		seconds = Math.floor(seconds);
-
-		this.composedString = hours + ':' + minutes + ':' + seconds;
+		this.composedString = this.unitObj.hours + ':' + this.unitObj.minutes + ':' + this.unitObj.seconds;
 
 		return this.composedString;
+
 	};
 
-	Chronos.getComposedString = function getComposedString() {
-		return this.composeString();
-	};
+	Chronos.composedToArray = function composedToArray(composedString) {
 
-	Chronos.composedToArray = function composedToArray() {
 		if (this.composedString) {
 			this.composedArray = this.composedString.split(':');
 		} else {
-			this.composedArray = this.getComposedString().split(':');
+			this.composedArray = this.composeString().split(':');
 		}
 
 		return this.composedArray;
+
+	};
+
+	Chronos.controller = function controller() {
+		var diff;
+
+		diff = this.getDiff();
+
+		this.calculateUnits(diff);
+
+		this.adjustUnits();
+
+		return this;
 	};
 
 	Chronos.start = function start(timeString) {
-		this.getNextGameTime(timeString);
+		this.timeString = timeString;
 
-		return this.getComposedString();
+		this.controller();
+
+		return this;
+
 	};
 
 	return Chronos;
