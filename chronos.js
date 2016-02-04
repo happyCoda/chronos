@@ -209,6 +209,16 @@ var ChronosWrapper = function ChronosWrapper() {
 
         diff = this.getDiff(time1, time2);
 
+        if (diff <= 1000) {
+            diff = 0;
+
+            if (this.interval) {
+                this.stop();
+            }
+
+
+        }
+
         this.calculateUnits(diff);
 
         this.adjustUnits();
@@ -217,7 +227,7 @@ var ChronosWrapper = function ChronosWrapper() {
             callback(this);
         }
 
-        if (name) {
+        if (name && diff !== 0) {
             this.interval = setInterval(this[name].bind(this, callback), 1000);
         }
 
