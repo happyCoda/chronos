@@ -6,6 +6,7 @@
  */
 
 var ChronosWrapper = function ChronosWrapper() {
+
 	'use strict';
 
 	/**
@@ -22,6 +23,7 @@ var ChronosWrapper = function ChronosWrapper() {
     * @returns {*} this[prop] any property value or undefined 
     */
 	Chronos.get = function get(prop) {
+		// TODO: make this method to return only string, array or object represents calculated time
 	    return this[prop];
 	};
 
@@ -47,24 +49,40 @@ var ChronosWrapper = function ChronosWrapper() {
     */
 	Chronos.getFutureTime = function getFutureTime() {
 
-	    if (!this.futureTime) {
-	        this.futureTime = new Date(this.timeString);
-	    }
+	    this.futureTime = new Date(this.timeString);
 
 	    return this.futureTime;
 	};
 
 	/**
-    * @method getDiff
-    * Calculates a difference between futureTime and currentTime
+    * @method getPastTime
+    * Gets past time for forward count
     *
-    * @returns {Number} diff difference between futureTime and currentTime timestamps
+    * @returns {Object} this.pastTime past time represented as a Date object
     */
-	Chronos.getDiff = function getDiff() {
+	Chronos.getPastTime = function getPastTime() {
+		var currentDateString;
 
-	    var diff;
+		currentDateString = this.getCurrentTime().toDateString();
 
-	    diff = (this.getFutureTime().getTime() - this.getCurrentTime().getTime());
+		this.pastTime = new Date(currentDateString + ' 00:00');
+
+		return this.pastTime;
+	};
+
+	/**
+    * @method getDiff
+    * Calculates a difference between current and target time
+    *
+    * @param {Number} time1 timestamp from current or future time
+    * @param {Number} time2 timestamp from past or current time
+    * @returns {Number} diff difference between current and target timestamps
+    */
+	Chronos.getDiff = function getDiff(time1, time2) {
+
+	    var diff, currentTimestamp;
+
+	    diff = time1 - time2;
 
 	    return diff;
 
@@ -131,6 +149,7 @@ var ChronosWrapper = function ChronosWrapper() {
 	    });
 
 	    return this;
+
 	};
 
 	/**
@@ -173,25 +192,45 @@ var ChronosWrapper = function ChronosWrapper() {
     * @returns {Object} this Chronos object for chaining
     */
 	Chronos.controller = function controller() {
-	    var diff;
 
-	    diff = this.getDiff();
+	    var diff, time1, time2;
+
+	    time1 = this.getCurrentTime().getTime();
+
+	    if (this.direction === 'forward') {
+	    	time2 = this.getPastTime().getTime();
+
+	    } else {
+
+	    	time2 = time1;
+	    	time1 = this.getFutureTime().getTime();
+
+	    }
+
+	    diff = this.getDiff(time1, time2);
 
 	    this.calculateUnits(diff);
 
 	    this.adjustUnits();
 
 	    return this;
+
 	};
 
 	/**
     * @method start
     * Module entry point
     *
+    * @param {Object} params object with initial settings
     * @returns {Object} this Chronos object for chaining
     */
-	Chronos.start = function start(timeString) {
-	    this.timeString = timeString;
+	Chronos.start = function start(params) {
+
+		this.direction = params.direction;
+
+		if (params.timeString) {
+			this.timeString = params.timeString;
+		}
 
 	    this.controller();
 
@@ -203,5 +242,7 @@ var ChronosWrapper = function ChronosWrapper() {
 };
 
 if (typeof define === 'function') {
+
 	define(ChronosWrapper);
+
 }

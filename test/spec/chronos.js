@@ -16,7 +16,10 @@ define([
 		describe('Chronos should be able to calculate time that left', function () {
 			var chr, timeArr;
 
-			chr = Chronos.start('10/21/15 12:30')
+			chr = Chronos.start({
+				direction: 'backward',
+				timeString: '10/21/15 12:30'
+			});
 
 			timeArr = chr.composedToArray();
 
@@ -31,6 +34,20 @@ define([
 				chr.adjustUnits();
 
 				expect(parseInt(timeArr[2], 10)).toBeLessThan(60);
+				
+			});
+		});
+
+		describe('Chronos should be able to act like a usual timer', function () {
+			var chr;
+
+			chr = Chronos.start({
+				direction: 'forward'
+			});
+
+			it('must return correct hours spent', function () {
+
+				expect(chr.unitObj.hours).toBeLessThan(24);
 				
 			});
 		});
