@@ -104,5 +104,11 @@ Chronos.start({
 ```
 
 ## Release History
-* 2016-02-04   v1.0.0   All logic completely rewritten.
-* 2016-02-03   v0.1.0   First official release.
+* 2016-02-05   v0.4.2   Case when backwards time is past fix.
+* 2016-02-05   v0.4.1   Chronos time runner added.
+* 2016-02-04   v0.3.0   Forward counting logic added.
+* 2016-02-04   v0.2.3   Docs and bower integration.
+* 2016-02-04   v0.2.2   adjustUnits method bug fixed.
+* 2016-02-04   v0.2.1   Code refactor.
+* 2016-02-04   v0.2.0   composedToArray method added & copyrights.
+* 2016-02-04   v0.1.0   First official release. Tests and main logic.
