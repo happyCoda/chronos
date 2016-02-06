@@ -5,272 +5,297 @@
  * Copyright (c) 2015 happyCoda. All rights reserved.
  */
 
- 'use strict';
-
- /**
-  * A module for creating timers.
-  * @exports Chronos
-  */
- var Chronos = {};
-
- /**
-  * @method get
-  * Factory method that returns any other property of Chronos
-  *
-  * @param {String} prop any string
-  * @returns {*} this[prop] any property value or undefined
-  */
- Chronos.get = function get(prop) {
-     // TODO: make this method to return only string, array or object represents calculated time
-     return this[prop];
- };
+'use strict';
+
+/**
+* A module for creating timers.
+* @exports Chronos
+*/
+var Chronos = {};
+
+/**
+* @method get
+* Factory method that returns any other property of Chronos
+*
+* @param {String} prop any string
+* @returns {*} this[prop] any property value or undefined
+*/
+Chronos.get = function get(prop) {
+  // TODO: make this method to return only string, array or object represents calculated time
+  return this[prop];
+};
 
- /**
-  * @method getCurrentTime
-  * Gets current time
-  *
-  * @returns {Object} currentTime current time represented as a Date object
-  */
- Chronos.getCurrentTime = function getCurrentTime() {
+/**
+* @method getCurrentTime
+* Gets current time
+*
+* @returns {Object} currentTime current time represented as a Date object
+*/
+Chronos.getCurrentTime = function getCurrentTime() {
 
-     var currentTime = new Date();
+  var currentTime = new Date();
 
-     return currentTime;
+  return currentTime;
 
- };
+};
 
- /**
-  * @method getFutureTime
-  * Gets future time for backwards count
-  *
-  * @returns {Object} this.futureTime future time represented as a Date object
-  */
- Chronos.getFutureTime = function getFutureTime() {
+/**
+* @method getFutureTime
+* Gets future time for backwards count
+*
+* @returns {Object} this.futureTime future time represented as a Date object
+*/
+Chronos.getFutureTime = function getFutureTime() {
 
-     this.futureTime = new Date(this.timeString);
+  if (this.duration) {
 
-     return this.futureTime;
- };
+    this.futureTime = new Date((new Date()).getTime() + this.duration);
 
- /**
-  * @method getPastTime
-  * Gets past time for forward count
-  *
-  * @returns {Object} this.pastTime past time represented as a Date object
-  */
- Chronos.getPastTime = function getPastTime() {
-     var currentDateString;
+  } else if (this.timeString) {
 
-     currentDateString = this.getCurrentTime().toDateString();
+    this.futureTime = new Date(this.timeString);
 
-     this.pastTime = new Date(currentDateString + ' 00:00');
+  } else {
 
-     return this.pastTime;
- };
+    throw new Error('There must be a duration or timeString specified!');
 
- /**
-  * @method getDiff
-  * Calculates a difference between current and target time
-  *
-  * @param {Number} time1 timestamp from current or future time
-  * @param {Number} time2 timestamp from past or current time
-  * @returns {Number} diff difference between current and target timestamps
-  */
- Chronos.getDiff = function getDiff(time1, time2) {
+  }
 
-     var diff;
+  return this.futureTime;
+};
 
-     diff = time1 - time2;
+/**
+* @method getPastTime
+* Gets past time for forward count
+*
+* @returns {Object} this.pastTime past time represented as a Date object
+*/
+Chronos.getPastTime = function getPastTime() {
+  var currentDateString;
 
-     return diff;
+  currentDateString = this.getCurrentTime().toDateString();
 
- };
+  this.pastTime = new Date(currentDateString + ' 00:00');
 
- /**
-  * @method calculateUnits
-  * Calculates time units which are – hrs, mins and secs
-  *
-  * @param {Number} timestampDiff between futureTime and currentTime timestamps
-  * @returns {Object} this.unitObj an object with hours, minutes and seconds for timestampDiff
-  */
- Chronos.calculateUnits = function calculateUnits(timestampDiff) {
+  return this.pastTime;
+};
 
-     var hoursRaw,
-         hoursRemains,
-         minutesRaw,
-         minutesRemains,
-         secondsRaw;
+/**
+* @method getDiff
+* Calculates a difference between current and target time
+*
+* @param {Number} time1 timestamp from current or future time
+* @param {Number} time2 timestamp from past or current time
+* @returns {Number} diff difference between current and target timestamps
+*/
+Chronos.getDiff = function getDiff(time1, time2) {
 
-     this.unitObj = {};
+  var diff;
 
-     hoursRaw = timestampDiff / 1000 / 3600;
+  diff = time1 - time2;
 
-     this.unitObj.hours = Math.floor(hoursRaw);
+  return diff;
 
-     hoursRemains = hoursRaw - this.unitObj.hours;
+};
 
-     minutesRaw = hoursRemains * 60;
+/**
+* @method calculateUnits
+* Calculates time units which are – hrs, mins and secs
+*
+* @param {Number} timestampDiff between futureTime and currentTime timestamps
+* @returns {Object} this.unitObj an object with hours, minutes and seconds for timestampDiff
+*/
+Chronos.calculateUnits = function calculateUnits(timestampDiff) {
 
-     this.unitObj.minutes = Math.floor(minutesRaw);
+  var hoursRaw,
+    hoursRemains,
+    minutesRaw,
+    minutesRemains,
+    secondsRaw;
 
-     minutesRemains = minutesRaw - this.unitObj.minutes;
+  this.unitObj = {};
 
-     secondsRaw = minutesRemains * 60;
+  hoursRaw = timestampDiff / 1000 / 3600;
 
-     this.unitObj.seconds = Math.floor(secondsRaw);
+  this.unitObj.hours = Math.floor(hoursRaw);
 
-     return this.unitObj;
+  hoursRemains = hoursRaw - this.unitObj.hours;
 
- };
+  minutesRaw = hoursRemains * 60;
 
- /**
-  * @method adjustUnits
-  * Converts time units to human readable format
-  *
-  * @returns {Object} this the this object for chaining
-  */
- Chronos.adjustUnits = function adjustUnits() {
+  this.unitObj.minutes = Math.floor(minutesRaw);
 
-     var props, unitObj;
+  minutesRemains = minutesRaw - this.unitObj.minutes;
 
-     props = Object.keys(this.unitObj);
+  secondsRaw = minutesRemains * 60;
 
-     unitObj = this.unitObj;
+  this.unitObj.seconds = Math.floor(secondsRaw);
 
-     props.forEach(function (prop) {
+  return this.unitObj;
 
-         unitObj[prop] = (unitObj[prop]).toString();
+};
 
-         if (unitObj[prop].length < 2) {
-             unitObj[prop] = '0' + unitObj[prop];
-         }
-     });
+/**
+* @method adjustUnits
+* Converts time units to human readable format
+*
+* @returns {Object} this the this object for chaining
+*/
+Chronos.adjustUnits = function adjustUnits() {
 
-     return this;
+  var props, unitObj;
 
- };
+  props = Object.keys(this.unitObj);
 
- /**
-  * @method composeString
-  * Converts unit object into string
-  *
-  * @returns {String} this.composedString a converted string
-  */
- Chronos.composeString = function composeString() {
+  unitObj = this.unitObj;
 
-     this.composedString = this.unitObj.hours + ':' + this.unitObj.minutes + ':' + this.unitObj.seconds;
+  props.forEach(function (prop) {
 
-     return this.composedString;
+    unitObj[prop] = (unitObj[prop]).toString();
 
- };
+    if (unitObj[prop].length < 2) {
+      unitObj[prop] = '0' + unitObj[prop];
+    }
+  });
 
- /**
-  * @method composedToArray
-  * Converts composed string to an array
-  *
-  * @param {String} composedString
-  * @returns {Array} this.composedArray a converted array
-  */
- Chronos.composedToArray = function composedToArray(composedString) {
+  return this;
 
-     if (this.composedString) {
-         this.composedArray = this.composedString.split(':');
-     } else {
-         this.composedArray = this.composeString().split(':');
-     }
+};
 
-     return this.composedArray;
+/**
+* @method composeString
+* Converts unit object into string
+*
+* @returns {String} this.composedString a converted string
+*/
+Chronos.composeString = function composeString() {
 
- };
+  this.composedString = this.unitObj.hours + ':' + this.unitObj.minutes + ':' + this.unitObj.seconds;
 
- /**
-  * @method controller
-  * Manage Chronos logic
-  *
-  * @returns {Object} this Chronos object for chaining
-  */
- Chronos.controller = function controller(callback, name) {
+  return this.composedString;
 
-     var diff, time1, time2;
+};
 
-     time1 = this.getCurrentTime().getTime();
+/**
+* @method composedToArray
+* Converts composed string to an array
+*
+* @param {String} composedString
+* @returns {Array} this.composedArray a converted array
+*/
+Chronos.composedToArray = function composedToArray(composedString) {
 
-     if (this.direction === 'forward') {
-         time2 = this.getPastTime().getTime();
+  if (this.composedString) {
+    this.composedArray = this.composedString.split(':');
+  } else {
+    this.composedArray = this.composeString().split(':');
+  }
 
-     } else {
+  return this.composedArray;
 
-         time2 = time1;
-         time1 = this.getFutureTime().getTime();
+};
 
-     }
+/**
+* @method controller
+* Manage Chronos logic
+*
+* @returns {Object} this Chronos object for chaining
+*/
+Chronos.controller = function controller(callback, name) {
 
-     diff = this.getDiff(time1, time2);
+  var diff, time1, time2;
 
-     if (diff <= 1000) {
-         diff = 0;
+  time1 = this.getCurrentTime().getTime();
 
-         if (this.interval) {
-             this.stop();
-         }
+  if (this.direction === 'forward') {
 
+    time2 = this.getPastTime().getTime();
 
-     }
+  } else {
 
-     this.calculateUnits(diff);
+    time2 = time1;
 
-     this.adjustUnits();
+    time1 = this.getFutureTime().getTime();
 
-     if (callback) {
-         callback(this);
-     }
+  }
 
-     if (name && diff !== 0) {
-         this.interval = setInterval(this[name].bind(this, callback), 1000);
-     }
+  diff = this.getDiff(time1, time2);
 
-     return this;
+  if (diff <= 1000) {
 
- };
+    diff = 0;
 
- /**
-  * @method start
-  * Module entry point
-  *
-  * @param {Object} params object with initial settings
-  * @returns {Object} this Chronos object for chaining
-  */
- Chronos.start = function start(params) {
+    if (this.interval) {
 
-     this.direction = params.direction;
+      this.stop();
+    }
 
-     if (params.timeString) {
-         this.timeString = params.timeString;
-     }
+  }
 
-     this.controller(params.callback, 'controller');
+  this.calculateUnits(diff);
 
-     return this;
+  this.adjustUnits();
 
- };
+  if (callback) {
 
- /**
-  * @method stop
-  * Stops chronos
-  *
-  * @returns {Object} this Chronos object for chaining
-  */
- Chronos.stop = function stop() {
+    callback(this);
 
-     clearInterval(this.interval);
+  }
 
-     return this;
- };
+  if (name && diff !== 0) {
+
+    this.interval = setInterval(this[name].bind(this, callback), 1000);
+    
+  }
+
+  return this;
+
+};
+
+/**
+* @method start
+* Module entry point
+*
+* @param {Object} params object with initial settings
+* @returns {Object} this Chronos object for chaining
+*/
+Chronos.start = function start(params) {
+
+  this.direction = params.direction;
+
+  if (params.timeString) {
+
+    this.timeString = params.timeString;
+
+  } else if (params.duration) {
+
+    this.duration = this.duration;
+
+  }
+
+  this.controller(params.callback, 'controller');
+
+  return this;
+
+};
+
+/**
+* @method stop
+* Stops chronos
+*
+* @returns {Object} this Chronos object for chaining
+*/
+Chronos.stop = function stop() {
+
+  clearInterval(this.interval);
+
+  return this;
+};
 
 if (typeof define === 'function' && define.amd) {
 
-    define(function () {
-      return Chronos;
-    });
+  define(function () {
+    return Chronos;
+  });
 
 }

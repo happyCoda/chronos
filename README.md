@@ -104,6 +104,7 @@ Chronos.start({
 ```
 
 ## Release History
+* 2016-02-06   v0.4.4   Added support for timer duration in milliseconds.
 * 2016-02-06   v0.4.3   AMD support refactor.
 * 2016-02-05   v0.4.2   Case when backwards time is past fix.
 * 2016-02-05   v0.4.1   Chronos time runner added.
