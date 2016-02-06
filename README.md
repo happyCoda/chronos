@@ -24,7 +24,9 @@ git clone https://github.com/happyCoda/chronos.git
 Just as simple as is.
 
 ```js
-Chronos.start({
+var chr = new Chronos();
+
+chr.start({
   direction: 'forward',
   callback: function (chr) {
     console.log(chr.composeString());
@@ -44,17 +46,22 @@ Chronos.js is written as an `AMD` module, so it's intended to use with loaders l
 Library entry point. Here all the gears and sprocket starts running.
 
 ```js
-Chronos.start(params);
+chr.start({
+  duration: 10000,
+  callback: function (chrInst) {
+    console.log(chrInst.composedToArray(chrInst.composeString())[2] + ' seconds left before explosion!');
+  }
+});
 ```
 
-Start method expects to get a `params` argument which has to be a configurations object. There can be three properties – `direction, callback [, timeString]`. The first one, `direction` decides whether Chronos will be a regular timer, or time will flow backwards. `callback` specifies a function callback which will be invoked every second with Chronos passed as an argument. And the last prop is a `timeString` which represents some time in the future, where Chronos will be count time to (e.g.: how much time left until the New Year).
+Start method expects to get an `Object` as an argument. This object can must have some of these configuration properties – `direction`, `callback`, `duration` and `timeString`. The first one, `direction` decides whether Chronos will act like a regular clock, or like a countdown timer. If direction is omitted, then `Chronos` will work like a timer. The `callback` option specifies a function callback which will be invoked every second with Chronos instance passed as an argument. `duration` represents time in milliseconds for a timer set up. If you have your setup time represented by a unix timestamp, you can pass this time as `timeString` property instead of `duration`.
 
 #### stop
 
 Chronos last stop.
 
 ```js
-Chronos.stop();
+chr.stop();
 ```
 
 This method does exactly as it says. If you need to stop Chronos for time counting, just call `stop`.
