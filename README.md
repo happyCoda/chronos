@@ -8,6 +8,12 @@ Library can be installed via [Bower](http://bower.io/) package manager:
 bower i chronosjs
 ```
 
+An `npm` package also available:
+
+```shell
+$ npm install chronos-js
+```
+
 Or you can clone a git repo:
 
 ```shell
@@ -104,6 +110,7 @@ Chronos.start({
 ```
 
 ## Release History
+* 2016-02-06   v0.5.4   Switched from singleton to constructor. Now multiple Chronos instances allowed.
 * 2016-02-06   v0.4.4   Added support for timer duration in milliseconds.
 * 2016-02-06   v0.4.3   AMD support refactor.
 * 2016-02-05   v0.4.2   Case when backwards time is past fix.

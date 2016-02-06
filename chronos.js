@@ -11,7 +11,7 @@
 * A module for creating timers.
 * @exports Chronos
 */
-var Chronos = {};
+function Chronos() {};
 
 /**
 * @method get
@@ -20,7 +20,7 @@ var Chronos = {};
 * @param {String} prop any string
 * @returns {*} this[prop] any property value or undefined
 */
-Chronos.get = function get(prop) {
+Chronos.prototype.get = function get(prop) {
   // TODO: make this method to return only string, array or object represents calculated time
   return this[prop];
 };
@@ -31,7 +31,7 @@ Chronos.get = function get(prop) {
 *
 * @returns {Object} currentTime current time represented as a Date object
 */
-Chronos.getCurrentTime = function getCurrentTime() {
+Chronos.prototype.getCurrentTime = function getCurrentTime() {
 
   var currentTime = new Date();
 
@@ -45,7 +45,7 @@ Chronos.getCurrentTime = function getCurrentTime() {
 *
 * @returns {Object} this.futureTime future time represented as a Date object
 */
-Chronos.getFutureTime = function getFutureTime() {
+Chronos.prototype.getFutureTime = function getFutureTime() {
 
   if (this.duration) {
 
@@ -70,7 +70,7 @@ Chronos.getFutureTime = function getFutureTime() {
 *
 * @returns {Object} this.pastTime past time represented as a Date object
 */
-Chronos.getPastTime = function getPastTime() {
+Chronos.prototype.getPastTime = function getPastTime() {
   var currentDateString;
 
   currentDateString = this.getCurrentTime().toDateString();
@@ -88,7 +88,7 @@ Chronos.getPastTime = function getPastTime() {
 * @param {Number} time2 timestamp from past or current time
 * @returns {Number} diff difference between current and target timestamps
 */
-Chronos.getDiff = function getDiff(time1, time2) {
+Chronos.prototype.getDiff = function getDiff(time1, time2) {
 
   var diff;
 
@@ -105,7 +105,7 @@ Chronos.getDiff = function getDiff(time1, time2) {
 * @param {Number} timestampDiff between futureTime and currentTime timestamps
 * @returns {Object} this.unitObj an object with hours, minutes and seconds for timestampDiff
 */
-Chronos.calculateUnits = function calculateUnits(timestampDiff) {
+Chronos.prototype.calculateUnits = function calculateUnits(timestampDiff) {
 
   var hoursRaw,
     hoursRemains,
@@ -141,7 +141,7 @@ Chronos.calculateUnits = function calculateUnits(timestampDiff) {
 *
 * @returns {Object} this the this object for chaining
 */
-Chronos.adjustUnits = function adjustUnits() {
+Chronos.prototype.adjustUnits = function adjustUnits() {
 
   var props, unitObj;
 
@@ -168,7 +168,7 @@ Chronos.adjustUnits = function adjustUnits() {
 *
 * @returns {String} this.composedString a converted string
 */
-Chronos.composeString = function composeString() {
+Chronos.prototype.composeString = function composeString() {
 
   this.composedString = this.unitObj.hours + ':' + this.unitObj.minutes + ':' + this.unitObj.seconds;
 
@@ -183,7 +183,7 @@ Chronos.composeString = function composeString() {
 * @param {String} composedString
 * @returns {Array} this.composedArray a converted array
 */
-Chronos.composedToArray = function composedToArray(composedString) {
+Chronos.prototype.composedToArray = function composedToArray(composedString) {
 
   if (this.composedString) {
     this.composedArray = this.composedString.split(':');
@@ -201,7 +201,7 @@ Chronos.composedToArray = function composedToArray(composedString) {
 *
 * @returns {Object} this Chronos object for chaining
 */
-Chronos.controller = function controller(callback, name) {
+Chronos.prototype.controller = function controller(callback, name) {
 
   var diff, time1, time2;
 
@@ -245,7 +245,7 @@ Chronos.controller = function controller(callback, name) {
   if (name && diff !== 0) {
 
     this.interval = setInterval(this[name].bind(this, callback), 1000);
-    
+
   }
 
   return this;
@@ -259,7 +259,7 @@ Chronos.controller = function controller(callback, name) {
 * @param {Object} params object with initial settings
 * @returns {Object} this Chronos object for chaining
 */
-Chronos.start = function start(params) {
+Chronos.prototype.start = function start(params) {
 
   this.direction = params.direction;
 
@@ -285,7 +285,7 @@ Chronos.start = function start(params) {
 *
 * @returns {Object} this Chronos object for chaining
 */
-Chronos.stop = function stop() {
+Chronos.prototype.stop = function stop() {
 
   clearInterval(this.interval);
 

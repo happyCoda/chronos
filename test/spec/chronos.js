@@ -8,7 +8,7 @@ define([
 		describe('Chronos should be able to get current time', function () {
 			it('getCurrentTime method must return a valid timestamp', function () {
 
-				expect(new Date(Chronos.getCurrentTime())).not.toEqual('Invalid Date');
+				expect(new Date((new Chronos()).getCurrentTime())).not.toEqual('Invalid Date');
 
 			});
 		});
@@ -16,7 +16,9 @@ define([
 		describe('Chronos should be able to calculate time that left', function () {
 			var chr, timeArr;
 
-			chr = Chronos.start({
+			chr = new Chronos();
+
+			chr.start({
 				timeString: '02/06/16 12:56',
 				callback: function (timer) {
 					console.log('time left: ', timer.composeString());
@@ -44,7 +46,9 @@ define([
 
 			it('should not throw an exception when duration parameter specified', function () {
 				expect(function () {
-					Chronos.start({
+					var chr = new Chronos();
+
+					chr.start({
 						timeString: Date.now() + 10000,
 						callback: function (timer) {
 							console.log('counting time left before dinner: ', timer.composeString());
@@ -54,21 +58,21 @@ define([
 			});
 		});
 
-		// describe('Chronos should be able to act like a usual timer', function () {
-		// 	var chr;
-		//
-		// 	chr = Chronos.start({
-		// 		direction: 'forward',
-		// 		callback: function (timer) {
-		// 			console.log(timer.composeString());
-		// 		}
-		// 	});
-		//
-		// 	it('must return correct hours spent', function () {
-		//
-		// 		expect(chr.unitObj.hours).toBeLessThan(24);
-		//
-		// 	});
-		// });
+		describe('Chronos should be able to act like a usual timer', function () {
+			var chr = new Chronos();
+
+			chr.start({
+				direction: 'forward',
+				callback: function (timer) {
+					console.log(timer.composeString());
+				}
+			});
+
+			it('must return correct hours spent', function () {
+
+				expect(chr.unitObj.hours).toBeLessThan(24);
+
+			});
+		});
 	});
 });
