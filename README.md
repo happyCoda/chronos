@@ -117,6 +117,7 @@ Chronos.start({
 ```
 
 ## Release History
+* 2017-02-15   v0.5.5   CommonJS support added.
 * 2016-02-06   v0.5.4   Switched from singleton to constructor. Now multiple Chronos instances allowed.
 * 2016-02-06   v0.4.4   Added support for timer duration in milliseconds.
 * 2016-02-06   v0.4.3   AMD support refactor.
