@@ -36,7 +36,7 @@ chr.start({
 
 ### Usage
 
-Chronos.js is written as an `AMD` module, so it's intended to use with loaders like Require.js, Almond, etc. However, library can be used directly in browser, since it exposes global wrapper – `ChronosWrapper`.
+Chronos.js supports `CommonJS` and `AMD` modules. However, library can be used directly in browser, since it exposes chronos object globally in case when no module system detected.
 
 
 ### API
